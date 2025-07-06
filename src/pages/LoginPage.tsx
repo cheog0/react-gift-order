@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { LoginForm } from '@/components/LoginForm';
+import { NavigationHeader } from '@/components/shared/layout';
+import { LoginForm } from '@/components/features/auth';
 import { theme } from '@/styles/theme';
 import { useAuth } from '@/contexts/AuthContext';
 

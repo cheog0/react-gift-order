@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useLoginForm } from '../hooks/useLoginForm';
+import { useLoginForm } from '@/hooks/useLoginForm';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 

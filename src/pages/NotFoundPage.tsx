@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { NotFoundLogo } from '@/components/NotFoundLogo';
+import { NavigationHeader } from '@/components/shared/layout';
+import { NotFoundLogo } from '@/components/shared/ui';
 
 const AppContainer = styled.div`
   min-height: 100vh;

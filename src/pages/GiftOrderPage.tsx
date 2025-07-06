@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import { NavigationHeader } from '@/components/NavigationHeader';
-import FormField from '@/components/FormField';
+import { NavigationHeader } from '@/components/shared/layout';
+import { FormField } from '@/components/shared/ui';
 import { messageCardTemplates, rankingProducts } from '@/mock/mockData';
 import type { MessageCardTemplate, GiftOrderForm, Product } from '@/types';
 import { useForm } from '@/hooks/useForm';

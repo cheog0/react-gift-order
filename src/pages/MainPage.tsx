@@ -1,9 +1,11 @@
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { FriendSelector } from '@/components/FriendSelector';
-import { GiftCategoryGrid } from '@/components/GiftCategoryGrid';
-import { PromotionBanner } from '@/components/PromotionBanner';
-import { RealTimeRanking } from '@/components/RealTimeRanking';
-import { ProductCard } from '@/components/ProductCard';
+import { NavigationHeader } from '@/components/shared/layout';
+import {
+  FriendSelector,
+  GiftCategoryGrid,
+  PromotionBanner,
+  RealTimeRanking,
+  ProductCard,
+} from '@/components/features/gift-order';
 import { giftThemes, rankingProducts } from '@/mock/mockData';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';

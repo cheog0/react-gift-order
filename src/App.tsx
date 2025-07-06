@@ -4,7 +4,7 @@ import LoginPage from '@/pages/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import MyPage from '@/pages/MyPage';
 import GiftOrderPage from '@/pages/GiftOrderPage';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ProtectedRoute } from '@/components/shared/ui';
 import { ROUTES } from '@/constants/routes';
 
 function App() {
