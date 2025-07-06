@@ -6,6 +6,13 @@ import FormField from '@/components/FormField';
 import { messageCardTemplates, rankingProducts } from '@/mock/mockData';
 import type { MessageCardTemplate, GiftOrderForm, Product } from '@/types';
 import { useForm } from '@/hooks/useForm';
+import {
+  validateMessage,
+  validateSenderName,
+  validateRecipientName,
+  validateRecipientPhone,
+  validateQuantity,
+} from '@/validators';
 
 interface GiftOrderPageProps {
   product?: Product;
@@ -28,30 +35,20 @@ export default function GiftOrderPage({
   const validateForm = (values: GiftOrderForm) => {
     const errors: Partial<Record<keyof GiftOrderForm, string>> = {};
 
-    if (!values.message.trim()) {
-      errors.message = '메시지를 입력해주세요.';
-    }
+    const messageError = validateMessage(values.message);
+    if (messageError) errors.message = messageError;
 
-    if (!values.senderName.trim()) {
-      errors.senderName = '이름을 입력해주세요.';
-    }
+    const senderError = validateSenderName(values.senderName);
+    if (senderError) errors.senderName = senderError;
 
-    if (!values.recipientName.trim()) {
-      errors.recipientName = '이름을 입력해주세요.';
-    }
+    const recipientNameError = validateRecipientName(values.recipientName);
+    if (recipientNameError) errors.recipientName = recipientNameError;
 
-    if (!values.recipientPhone.trim()) {
-      errors.recipientPhone = '전화번호를 입력해주세요.';
-    } else {
-      const phoneRegex = /^010(-?\d{4})-?(\d{4})$/;
-      if (!phoneRegex.test(values.recipientPhone)) {
-        errors.recipientPhone = '올바른 전화번호 형식이 아닙니다.';
-      }
-    }
+    const phoneError = validateRecipientPhone(values.recipientPhone);
+    if (phoneError) errors.recipientPhone = phoneError;
 
-    if (values.quantity < 1) {
-      errors.quantity = '구매 수량은 1개 이상이어야 합니다.';
-    }
+    const quantityError = validateQuantity(values.quantity);
+    if (quantityError) errors.quantity = quantityError;
 
     return errors;
   };
