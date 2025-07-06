@@ -41,4 +41,5 @@ export interface GiftOrderForm {
   recipientPhone: string;
   quantity: number;
   selectedTemplate: MessageCardTemplate;
+  [key: string]: unknown;
 }

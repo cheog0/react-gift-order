@@ -58,7 +58,7 @@ export default function GiftOrderPage({
     errors,
     handleChange,
     validateForm: validate,
-  } = useForm(initialFormData, validateForm);
+  } = useForm<GiftOrderForm>(initialFormData, validateForm);
 
   const handleTemplateSelect = (template: MessageCardTemplate) => {
     // 템플릿 선택 시 관련 상태들을 함께 업데이트
