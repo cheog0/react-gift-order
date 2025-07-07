@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Plus } from 'lucide-react';
 import { theme } from '@/styles/theme';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface FriendSelectorProps {
   onAddFriend?: () => void;
@@ -9,8 +10,25 @@ interface FriendSelectorProps {
 
 export function FriendSelector({
   onAddFriend,
-  placeholder = '선물할 친구를 선택해 주세요.',
+  placeholder,
 }: FriendSelectorProps) {
+  const { user } = useAuth();
+
+  const getUsername = (email: string) => {
+    return email.split('@')[0];
+  };
+
+  const getPlaceholder = () => {
+    if (placeholder) return placeholder;
+
+    if (user?.email) {
+      const username = getUsername(user.email);
+      return `${username}님! 선물할 친구를 선택해 주세요.`;
+    }
+
+    return '선물할 친구를 선택해 주세요.';
+  };
+
   const handleClick = () => {
     console.log('친구 선택 클릭');
     onAddFriend?.();
@@ -22,7 +40,7 @@ export function FriendSelector({
         <PlusButton type="button">
           <Plus />
         </PlusButton>
-        <PlaceholderText>{placeholder}</PlaceholderText>
+        <PlaceholderText>{getPlaceholder()}</PlaceholderText>
       </SelectorWrapper>
     </SelectorContainer>
   );
