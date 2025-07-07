@@ -1,8 +1,8 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { NotFoundLogo } from '@/components/NotFoundLogo';
+import { NavigationHeader } from '@/components/shared/layout';
+import { NotFoundLogo } from '@/components/shared/ui';
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -87,22 +87,15 @@ const HomeButton = styled.button`
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleGoHome = () => {
     navigate('/', { replace: true });
   };
 
-  const handleBackClick = () => {
-    // 이전 페이지로 이동하거나 홈으로 이동
-    const from = location.state?.from || '/';
-    navigate(from);
-  };
-
   return (
     <AppContainer>
       <MobileViewport>
-        <NavigationHeader title="선물하기" onBackClick={handleBackClick} />
+        <NavigationHeader title="선물하기" />
         <NotFoundContainer>
           <NotFoundLogo
             style={{

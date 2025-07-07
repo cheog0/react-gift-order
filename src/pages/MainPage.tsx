@@ -1,18 +1,16 @@
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { FriendSelector } from '@/components/FriendSelector';
-import { GiftCategoryGrid } from '@/components/GiftCategoryGrid';
-import { PromotionBanner } from '@/components/PromotionBanner';
-import { RealTimeRanking } from '@/components/RealTimeRanking';
-import { ProductCard } from '@/components/ProductCard';
+import { NavigationHeader } from '@/components/shared/layout';
+import {
+  FriendSelector,
+  GiftCategoryGrid,
+  PromotionBanner,
+  RealTimeRanking,
+  ProductCard,
+} from '@/components/features/gift-order';
 import { giftThemes, rankingProducts } from '@/mock/mockData';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 
 export default function MainPage() {
-  const handleBackClick = (): void => {
-    // 뒤로 가기 기능 구현
-  };
-
   const handleAddFriend = (): void => {
     // 친구 추가 기능 구현
   };
@@ -20,7 +18,7 @@ export default function MainPage() {
   return (
     <AppContainer>
       <MobileViewport>
-        <NavigationHeader title="선물하기" onBackClick={handleBackClick} />
+        <NavigationHeader title="선물하기" />
 
         <FriendSelector onAddFriend={handleAddFriend} />
 

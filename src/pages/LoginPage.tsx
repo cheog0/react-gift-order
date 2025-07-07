@@ -1,8 +1,37 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { NavigationHeader } from '@/components/NavigationHeader';
-import { LoginForm } from '@/components/LoginForm';
+import { NavigationHeader } from '@/components/shared/layout';
+import { LoginForm } from '@/components/features/auth';
 import { theme } from '@/styles/theme';
+import { useAuth } from '@/contexts/AuthContext';
+
+export default function LoginPage() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleRedirect = (replace: boolean = true) => {
+    const from = location.state?.from || '/';
+    navigate(from, { replace });
+  };
+
+  const handleLogin = (email: string, _password: string) => {
+    login({ email });
+    handleRedirect(true);
+  };
+
+  return (
+    <AppContainer>
+      <MobileViewport>
+        <NavigationHeader
+          title="선물하기"
+          onBackClick={() => handleRedirect(false)}
+        />
+        <LoginForm onSubmit={handleLogin} />
+      </MobileViewport>
+    </AppContainer>
+  );
+}
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -29,25 +58,3 @@ const MobileViewport = styled.div`
     box-shadow: none;
   }
 `;
-
-export default function LoginPage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleRedirect = (replace: boolean = true) => {
-    const from = location.state?.from || '/';
-    navigate(from, { replace });
-  };
-
-  return (
-    <AppContainer>
-      <MobileViewport>
-        <NavigationHeader
-          title="선물하기"
-          onBackClick={() => handleRedirect(false)}
-        />
-        <LoginForm onSubmit={() => handleRedirect(true)} />
-      </MobileViewport>
-    </AppContainer>
-  );
-}
