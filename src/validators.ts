@@ -1,3 +1,5 @@
+import type { Recipient } from '@/pages/GiftOrderPage';
+
 export const validateMessage = (message: string): string | null => {
   if (!message.trim()) return '메시지를 입력해주세요.';
   return null;
@@ -23,4 +25,15 @@ export const validateRecipientPhone = (phone: string): string | null => {
 export const validateQuantity = (quantity: number): string | null => {
   if (quantity < 1) return '구매 수량은 1개 이상이어야 합니다.';
   return null;
+};
+
+export const validateDuplicateRecipientPhone = (
+  phone: string,
+  id: number,
+  recipients: Recipient[]
+): string | null => {
+  if (!phone) return null;
+  const isDuplicate =
+    recipients.filter(r => r.phone === phone && r.id !== id).length > 0;
+  return isDuplicate ? '중복된 전화번호가 있습니다.' : null;
 };
