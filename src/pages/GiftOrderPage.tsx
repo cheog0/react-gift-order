@@ -9,21 +9,10 @@ import type { MessageCardTemplate, Product } from '@/types';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  useForm as useReactHookForm,
-  useFieldArray as useReactHookFieldArray,
-} from 'react-hook-form';
 import RecipientModal from '@/components/features/gift-order/RecipientModal';
 
 interface GiftOrderPageProps {
   product?: Product;
-}
-
-export interface Recipient {
-  id: number;
-  name: string;
-  phone: string;
-  quantity: number;
 }
 
 const recipientSchema = z.object({
@@ -108,7 +97,7 @@ export default function GiftOrderPage({
     formState: { errors: modalErrors },
     register: modalRegister,
     reset: modalReset,
-  } = useReactHookForm<{
+  } = useForm<{
     recipients: { name: string; phone: string; quantity: number }[];
   }>({
     resolver: zodResolver(z.object({ recipients: recipientArraySchema })),
@@ -118,7 +107,7 @@ export default function GiftOrderPage({
     fields: modalFields,
     append: modalAppend,
     remove: modalRemove,
-  } = useReactHookFieldArray({
+  } = useFieldArray({
     control: modalControl,
     name: 'recipients',
   });
@@ -191,7 +180,6 @@ export default function GiftOrderPage({
                   key={template.id}
                   isSelected={selectedTemplate.id === template.id}
                   onClick={() => handleTemplateSelect(template)}
-                  hasError={!!errors.recipients?.[0]?.phone} // 첫 번째 수신자의 전화번호 에러
                 >
                   <img
                     src={template.thumbUrl || '/placeholder.svg'}
@@ -399,23 +387,16 @@ const ProductSection = styled.div`
 
 const TemplateThumb = styled.button<{
   isSelected: boolean;
-  hasError?: boolean;
 }>`
   flex-shrink: 0;
   width: 80px;
   height: 55px;
   border: 3px solid
-    ${({ isSelected, hasError, theme }) =>
-      hasError ? 'none' : isSelected ? theme.colors.gray1000 : 'none'};
+    ${({ isSelected, theme }) => (isSelected ? theme.colors.gray1000 : 'none')};
   border-radius: 10px;
   background: none;
   cursor: pointer;
   transition: all 0.2s ease;
-
-  &:hover {
-    border-color: ${({ hasError, theme }) =>
-      hasError ? 'none' : theme.colors.blue500};
-  }
 
   &:active {
     transform: scale(0.95);
