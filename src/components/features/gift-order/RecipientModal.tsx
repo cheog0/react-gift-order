@@ -6,11 +6,6 @@ import RecipientFormItem from './RecipientFormItem';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type {
-  UseFormRegister,
-  FieldArrayWithId,
-  FieldErrors,
-} from 'react-hook-form';
 
 type Recipient = { name: string; phone: string; quantity: number };
 type RecipientsForm = { recipients: Recipient[] };
