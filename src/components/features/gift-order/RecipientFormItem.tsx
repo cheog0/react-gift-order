@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import { FormField } from '@/components/shared/ui';
 import type { UseFormRegister } from 'react-hook-form';
-import type { Recipient, RecipientsForm } from '@/types';
+import type { RecipientsForm } from '@/types';
 
 interface RecipientFormItemProps {
   index: number;
