@@ -3,13 +3,17 @@ import type { RefObject } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import RecipientFormItem from './RecipientFormItem';
+import type { UseFormRegister } from 'react-hook-form';
+
+type Recipient = { name: string; phone: string; quantity: number };
+type RecipientsForm = { recipients: Recipient[] };
 
 interface RecipientModalProps {
   isOpen: boolean;
   onClose: () => void;
   fields: any[];
   errors: any;
-  register: any;
+  register: UseFormRegister<RecipientsForm>;
   append: () => void;
   remove: (index: number) => void;
   onSave: () => void;

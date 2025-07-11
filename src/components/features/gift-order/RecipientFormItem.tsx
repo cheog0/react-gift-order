@@ -1,7 +1,11 @@
 import React from 'react';
-import { FormField } from '@/components/shared/ui';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
+import { FormField } from '@/components/shared/ui';
+import type { UseFormRegister } from 'react-hook-form';
+
+type Recipient = { name: string; phone: string; quantity: number };
+type RecipientsForm = { recipients: Recipient[] };
 
 interface RecipientFormItemProps {
   index: number;
@@ -11,7 +15,7 @@ interface RecipientFormItemProps {
     phone?: { message?: string };
     quantity?: { message?: string };
   };
-  register: any;
+  register: UseFormRegister<RecipientsForm>;
   remove: (index: number) => void;
 }
 
