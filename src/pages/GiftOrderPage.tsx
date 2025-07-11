@@ -5,7 +5,7 @@ import { theme } from '@/styles/theme';
 import { NavigationHeader } from '@/components/shared/layout';
 import { FormField } from '@/components/shared/ui';
 import { messageCardTemplates, rankingProducts } from '@/mock/mockData';
-import type { MessageCardTemplate, Product } from '@/types';
+import type { MessageCardTemplate, Product, Recipient } from '@/types';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -54,7 +54,7 @@ export default function GiftOrderPage({
 
   const onSubmit = (data: OrderForm) => {
     const totalQuantity = data.recipients.reduce(
-      (sum: any, r: any) => sum + r.quantity,
+      (sum: number, r: Recipient) => sum + r.quantity,
       0
     );
     alert(
