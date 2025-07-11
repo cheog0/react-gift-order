@@ -3,7 +3,11 @@ import type { RefObject } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import RecipientFormItem from './RecipientFormItem';
-import type { UseFormRegister } from 'react-hook-form';
+import type {
+  UseFormRegister,
+  FieldArrayWithId,
+  FieldErrors,
+} from 'react-hook-form';
 
 type Recipient = { name: string; phone: string; quantity: number };
 type RecipientsForm = { recipients: Recipient[] };
@@ -11,8 +15,8 @@ type RecipientsForm = { recipients: Recipient[] };
 interface RecipientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  fields: any[];
-  errors: any;
+  fields: FieldArrayWithId<RecipientsForm, 'recipients', 'id'>[];
+  errors: FieldErrors<RecipientsForm>;
   register: UseFormRegister<RecipientsForm>;
   append: () => void;
   remove: (index: number) => void;

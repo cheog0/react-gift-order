@@ -246,7 +246,7 @@ export default function GiftOrderPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {fields.map((field: any, index: number) => (
+                  {fields.map((field, index) => (
                     <tr key={field.id}>
                       <td>
                         <span>{field.name}</span>
