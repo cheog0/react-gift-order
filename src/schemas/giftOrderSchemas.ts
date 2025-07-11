@@ -32,3 +32,15 @@ export const recipientArraySchema = z
       }
     });
   });
+
+export const orderSchema = z.object({
+  senderName: z.string().min(1, '이름을 입력해주세요.'),
+  message: z.string().min(1, '메시지를 입력해주세요.'),
+  selectedTemplate: z.object({
+    id: z.number(),
+    thumbUrl: z.string(),
+    imageUrl: z.string(),
+    defaultTextMessage: z.string(),
+  }),
+  recipients: recipientArraySchema,
+});
