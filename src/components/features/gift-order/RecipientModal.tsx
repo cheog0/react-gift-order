@@ -6,9 +6,7 @@ import RecipientFormItem from './RecipientFormItem';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-type Recipient = { name: string; phone: string; quantity: number };
-type RecipientsForm = { recipients: Recipient[] };
+import type { Recipient, RecipientsForm } from '@/types';
 
 const recipientSchema = z.object({
   name: z.string().min(1, '이름을 입력해주세요.'),
