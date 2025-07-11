@@ -371,7 +371,7 @@ const TemplateScroller = styled.div`
   overflow-x: auto;
   gap: 8px;
   padding: 12px 0;
-  margin-bottom: 24px;
+  margin-bottom: ${theme.spacing.spacing6};
   border-radius: 12px;
   background: ${theme.colors.default};
   &::-webkit-scrollbar {
