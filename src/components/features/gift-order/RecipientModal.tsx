@@ -26,8 +26,9 @@ const recipientArraySchema = z
   .superRefine((arr, ctx) => {
     const phoneMap = new Map<string, number[]>();
     arr.forEach((r, i) => {
-      if (!phoneMap.has(r.phone)) phoneMap.set(r.phone, []);
-      phoneMap.get(r.phone)!.push(i);
+      const indices = phoneMap.get(r.phone) ?? [];
+      indices.push(i);
+      phoneMap.set(r.phone, indices);
     });
     phoneMap.forEach((indices, phone) => {
       if (phone && indices.length > 1) {
