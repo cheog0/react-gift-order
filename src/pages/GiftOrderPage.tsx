@@ -168,6 +168,20 @@ export default function GiftOrderPage({
         ? modalErrors.recipients?.root?.message
         : undefined;
 
+  const calculateTotalQuantity = (
+    recipients: { quantity: number }[]
+  ): number => {
+    return recipients.reduce((sum, recipient) => sum + recipient.quantity, 0);
+  };
+
+  const calculateTotalPrice = (
+    unitPrice: number,
+    recipients: { quantity: number }[]
+  ): number => {
+    const totalQuantity = calculateTotalQuantity(recipients);
+    return unitPrice * totalQuantity;
+  };
+
   return (
     <AppContainer>
       <MobileViewport>
@@ -272,14 +286,10 @@ export default function GiftOrderPage({
         />
 
         <OrderButton onClick={handleSubmit(onSubmit)}>
-          {product.price.sellingPrice *
-            getValues('recipients').reduce(
-              (
-                sum: number,
-                r: { name: string; phone: string; quantity: number }
-              ) => sum + r.quantity,
-              0
-            )}
+          {calculateTotalPrice(
+            product.price.sellingPrice,
+            getValues('recipients')
+          )}
           원 주문하기
         </OrderButton>
       </MobileViewport>
