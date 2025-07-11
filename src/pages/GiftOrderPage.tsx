@@ -159,14 +159,25 @@ export default function GiftOrderPage({
     setIsRecipientModalOpen(false);
   });
 
-  const duplicateError =
-    typeof modalErrors.recipients?.message === 'string' &&
-    modalErrors.recipients?.message
-      ? modalErrors.recipients?.message
-      : typeof modalErrors.recipients?.root?.message === 'string' &&
-          modalErrors.recipients?.root?.message
-        ? modalErrors.recipients?.root?.message
-        : undefined;
+  const getDuplicateError = (): string | undefined => {
+    if (
+      typeof modalErrors.recipients?.message === 'string' &&
+      modalErrors.recipients?.message
+    ) {
+      return modalErrors.recipients.message;
+    }
+
+    if (
+      typeof modalErrors.recipients?.root?.message === 'string' &&
+      modalErrors.recipients?.root?.message
+    ) {
+      return modalErrors.recipients.root.message;
+    }
+
+    return undefined;
+  };
+
+  const duplicateError = getDuplicateError();
 
   const calculateTotalQuantity = (
     recipients: { quantity: number }[]
