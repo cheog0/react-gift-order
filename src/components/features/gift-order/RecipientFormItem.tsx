@@ -43,6 +43,26 @@ const RecipientFormItem: React.FC<RecipientFormItemProps> = ({
         {...register(`recipients.${index}.phone` as const)}
         placeholder="전화번호를 입력하세요."
         hasError={!!errors.phone?.message}
+        onKeyDown={e => {
+          const allowedKeys = [
+            'Backspace',
+            'Delete',
+            'ArrowLeft',
+            'ArrowRight',
+            'ArrowUp',
+            'ArrowDown',
+            'Tab',
+            'Enter',
+          ];
+
+          if (e.key >= '0' && e.key <= '9') {
+            return;
+          }
+
+          if (!allowedKeys.includes(e.key)) {
+            e.preventDefault();
+          }
+        }}
       />
     </FormField>
     <FormField label="수량" error={errors.quantity?.message} direction="row">
