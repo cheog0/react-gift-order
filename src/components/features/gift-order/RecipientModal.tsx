@@ -3,6 +3,9 @@ import type { RefObject } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import RecipientFormItem from './RecipientFormItem';
+import { useForm, useFieldArray } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type {
   UseFormRegister,
   FieldArrayWithId,
@@ -12,36 +15,108 @@ import type {
 type Recipient = { name: string; phone: string; quantity: number };
 type RecipientsForm = { recipients: Recipient[] };
 
+const recipientSchema = z.object({
+  name: z.string().min(1, '이름을 입력해주세요.'),
+  phone: z
+    .string()
+    .min(1, '전화번호를 입력해주세요.')
+    .regex(/^010[0-9]{8}$/, '올바른 전화번호 형식이 아니에요.'),
+  quantity: z.coerce.number().min(1, '구매 수량은 1개 이상이어야 해요.'),
+});
+
+const recipientArraySchema = z
+  .array(recipientSchema)
+  .min(0, '최소 0명')
+  .max(10, '최대 10명')
+  .superRefine((arr, ctx) => {
+    const phoneMap = new Map<string, number[]>();
+    arr.forEach((r, i) => {
+      if (!phoneMap.has(r.phone)) phoneMap.set(r.phone, []);
+      phoneMap.get(r.phone)!.push(i);
+    });
+    phoneMap.forEach((indices, phone) => {
+      if (phone && indices.length > 1) {
+        indices.forEach(idx => {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: '중복된 전화번호가 있습니다.',
+            path: [idx, 'phone'],
+          });
+        });
+      }
+    });
+  });
+
 interface RecipientModalProps {
   isOpen: boolean;
   onClose: () => void;
-  fields: FieldArrayWithId<RecipientsForm, 'recipients', 'id'>[];
-  errors: FieldErrors<RecipientsForm>;
-  register: UseFormRegister<RecipientsForm>;
-  append: () => void;
-  remove: (index: number) => void;
-  onSave: () => void;
-  duplicateError?: string;
+  initialRecipients: Recipient[];
+  onSave: (recipients: Recipient[]) => void;
   modalBodyRef: RefObject<HTMLDivElement | null>;
-  modalFieldsLength: number;
   maxRecipients?: number;
 }
 
 const RecipientModal: React.FC<RecipientModalProps> = ({
   isOpen,
   onClose,
-  fields,
-  errors,
-  register,
-  append,
-  remove,
+  initialRecipients,
   onSave,
-  duplicateError,
   modalBodyRef,
-  modalFieldsLength,
   maxRecipients = 10,
 }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    register,
+    reset,
+  } = useForm<RecipientsForm>({
+    resolver: zodResolver(z.object({ recipients: recipientArraySchema })),
+    defaultValues: { recipients: initialRecipients },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'recipients',
+  });
+
+  const getDuplicateError = (): string | undefined => {
+    if (
+      typeof errors.recipients?.message === 'string' &&
+      errors.recipients?.message
+    ) {
+      return errors.recipients.message;
+    }
+
+    if (
+      typeof errors.recipients?.root?.message === 'string' &&
+      errors.recipients?.root?.message
+    ) {
+      return errors.recipients.root.message;
+    }
+
+    return undefined;
+  };
+
+  const duplicateError = getDuplicateError();
+
+  const handleAdd = () => {
+    append({ name: '', phone: '', quantity: 1 });
+  };
+
+  const handleSave = handleSubmit(data => {
+    onSave(data.recipients);
+  });
+
+  // 모달이 열릴 때마다 초기값으로 리셋
+  React.useEffect(() => {
+    if (isOpen) {
+      reset({ recipients: initialRecipients });
+    }
+  }, [isOpen, initialRecipients, reset]);
+
   if (!isOpen) return null;
+
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={e => e.stopPropagation()}>
@@ -58,8 +133,8 @@ const RecipientModal: React.FC<RecipientModalProps> = ({
               * 받는 사람의 전화번호를 중복으로 입력 할 수 없어요.
             </ModalDescription>
             <AddRecipientButton
-              onClick={append}
-              disabled={modalFieldsLength >= maxRecipients}
+              onClick={handleAdd}
+              disabled={fields.length >= maxRecipients}
             >
               추가하기
             </AddRecipientButton>
@@ -84,9 +159,9 @@ const RecipientModal: React.FC<RecipientModalProps> = ({
           <ModalCancelButton onClick={onClose}>취소</ModalCancelButton>
           <ModalSaveButton
             style={{ backgroundColor: theme.colors.kakaoYellow }}
-            onClick={onSave}
+            onClick={handleSave}
           >
-            {modalFieldsLength}명 완료
+            {fields.length}명 완료
           </ModalSaveButton>
         </ModalFooter>
       </ModalContent>

@@ -92,27 +92,6 @@ export default function GiftOrderPage({
     name: 'recipients',
   });
 
-  const {
-    control: modalControl,
-    handleSubmit: handleModalSubmit,
-    formState: { errors: modalErrors },
-    register: modalRegister,
-    reset: modalReset,
-  } = useForm<{
-    recipients: { name: string; phone: string; quantity: number }[];
-  }>({
-    resolver: zodResolver(z.object({ recipients: recipientArraySchema })),
-    defaultValues: { recipients: getValues('recipients') },
-  });
-  const {
-    fields: modalFields,
-    append: modalAppend,
-    remove: modalRemove,
-  } = useFieldArray({
-    control: modalControl,
-    name: 'recipients',
-  });
-
   const [isRecipientModalOpen, setIsRecipientModalOpen] = useState(false);
 
   const onSubmit = (data: OrderForm) => {
@@ -146,38 +125,15 @@ export default function GiftOrderPage({
   const displayProductName = product.name.replace(/\s\d+$/, '');
 
   const openModal = () => {
-    modalReset({ recipients: getValues('recipients') });
     setIsRecipientModalOpen(true);
   };
 
-  const handleModalAdd = () => {
-    modalAppend({ name: '', phone: '', quantity: 1 });
-  };
-
-  const handleModalComplete = handleModalSubmit(data => {
-    setValue('recipients', data.recipients);
+  const handleModalSave = (
+    recipients: { name: string; phone: string; quantity: number }[]
+  ) => {
+    setValue('recipients', recipients);
     setIsRecipientModalOpen(false);
-  });
-
-  const getDuplicateError = (): string | undefined => {
-    if (
-      typeof modalErrors.recipients?.message === 'string' &&
-      modalErrors.recipients?.message
-    ) {
-      return modalErrors.recipients.message;
-    }
-
-    if (
-      typeof modalErrors.recipients?.root?.message === 'string' &&
-      modalErrors.recipients?.root?.message
-    ) {
-      return modalErrors.recipients.root.message;
-    }
-
-    return undefined;
   };
-
-  const duplicateError = getDuplicateError();
 
   const calculateTotalQuantity = (
     recipients: { quantity: number }[]
@@ -253,7 +209,7 @@ export default function GiftOrderPage({
           <FormSection>
             <RecipientHeader>
               <SectionTitle>받는 사람</SectionTitle>
-              <EditButton onClick={openModal}>수정</EditButton>
+              <EditButton onClick={openModal}>추가</EditButton>
             </RecipientHeader>
             {fields.length === 0 ? (
               <EmptyRecipientContainer>
@@ -285,15 +241,9 @@ export default function GiftOrderPage({
         <RecipientModal
           isOpen={isRecipientModalOpen}
           onClose={() => setIsRecipientModalOpen(false)}
-          fields={modalFields}
-          errors={modalErrors}
-          register={modalRegister}
-          append={handleModalAdd}
-          remove={modalRemove}
-          onSave={handleModalComplete}
-          duplicateError={duplicateError}
+          initialRecipients={getValues('recipients')}
+          onSave={handleModalSave}
           modalBodyRef={modalBodyRef}
-          modalFieldsLength={modalFields.length}
         />
 
         <OrderButton onClick={handleSubmit(onSubmit)}>
@@ -558,9 +508,8 @@ const RecipientHeader = styled.div`
 `;
 
 const EditButton = styled.button`
-  padding: ${theme.spacing.spacing1} ${theme.spacing.spacing2};
+  padding: ${theme.spacing.spacing2} ${theme.spacing.spacing4};
   background: ${theme.colors.gray200};
-  border: 1px solid ${theme.colors.borderDefault};
   border-radius: 8px;
   font-size: ${theme.typography.body2Regular.fontSize};
   color: ${theme.colors.textDefault};
