@@ -10,6 +10,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RecipientModal from '@/components/features/gift-order/RecipientModal';
+import { RecipientTable } from '@/components/features/gift-order';
 
 interface GiftOrderPageProps {
   product?: Product;
@@ -237,45 +238,7 @@ export default function GiftOrderPage({
                 </EmptyRecipientSubText>
               </EmptyRecipientContainer>
             ) : (
-              <RecipientTable>
-                <thead>
-                  <tr>
-                    <th>이름</th>
-                    <th>전화번호</th>
-                    <th>수량</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fields.map((field, index) => (
-                    <tr key={field.id}>
-                      <td>
-                        <span>{field.name}</span>
-                        {errors.recipients?.[index]?.name?.message && (
-                          <div style={{ color: 'red', fontSize: 12 }}>
-                            {errors.recipients[index]?.name?.message}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        <span>{field.phone}</span>
-                        {errors.recipients?.[index]?.phone?.message && (
-                          <div style={{ color: 'red', fontSize: 12 }}>
-                            {errors.recipients[index]?.phone?.message}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        <span>{field.quantity}</span>
-                        {errors.recipients?.[index]?.quantity?.message && (
-                          <div style={{ color: 'red', fontSize: 12 }}>
-                            {errors.recipients[index]?.quantity?.message}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </RecipientTable>
+              <RecipientTable fields={fields} errors={errors} />
             )}
           </FormSection>
           <Separator />
@@ -294,7 +257,6 @@ export default function GiftOrderPage({
             </ProductInfo>
           </ProductSection>
         </FormContainer>
-        {/* Recipient Modal */}
         <RecipientModal
           isOpen={isRecipientModalOpen}
           onClose={() => setIsRecipientModalOpen(false)}
@@ -614,38 +576,4 @@ const EmptyRecipientText = styled.div`
 
 const EmptyRecipientSubText = styled.div`
   font-size: ${theme.typography.body2Regular.fontSize};
-`;
-
-const RecipientTable = styled.table`
-  width: 100%;
-  border-radius: 12px;
-  border-collapse: collapse;
-  border: 1px solid ${theme.colors.gray300};
-  overflow: hidden;
-  background: ${theme.colors.default};
-  margin-top: ${theme.spacing.spacing2};
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-
-  th,
-  td {
-    padding: ${theme.spacing.spacing3} ${theme.spacing.spacing8};
-    text-align: left;
-    font-size: ${theme.typography.body2Regular.fontSize};
-    font-weight: ${theme.typography.title2Regular.fontWeight};
-  }
-
-  th {
-    background: ${theme.colors.gray100};
-    font-weight: ${theme.typography.body2Bold.fontWeight};
-    color: ${theme.colors.textDefault};
-    border-bottom: 1px solid ${theme.colors.borderDefault};
-  }
-
-  td {
-    border-bottom: 1px solid ${theme.colors.borderDefault};
-  }
-
-  tr:last-child td {
-    border-bottom: none;
-  }
 `;
